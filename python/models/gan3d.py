@@ -4,29 +4,26 @@ from tflearn.layers.core import *
 import tensorflow as tf
 import tflearn as tl
 
-FLAGS = tf.app.flags.FLAGS
-
 
 class Discriminator3d(object):
-    def __init__(self):
+    def __init__(self, logging, batch_size, learning_rate, image_size, hidden_size):
         """
         Evaluation network for chess boards. Based on an MNIST CNN but for 8x8 images
         """
         # Network Parameters
-        self.logging = FLAGS.logging
-        self.batch_size = FLAGS.batch_size
-        self.learning_rate = FLAGS.learning_rate
-        self.image_size, self.hidden_size = FLAGS.image_size, FLAGS.hidden_size
+        self.logging = logging
+        self.batch_size = batch_size
+        self.learning_rate = learning_rate
+        self.image_size, self.hidden_size = image_size, hidden_size
         
         # Placeholders for inputs
         self.input_shape = [self.batch_size, self.image_size,\
                             self.image_size, self.image_size, 1]
-        self.x = tf.placeholder(tf.int32, shape=self.input_shape)
-        self.y = tf.placeholder(tf.int8, shape=[self.batch_size])
+        self.x = tf.placeholder(tf.float32, shape=self.input_shape)
+        self.y = tf.placeholder(tf.float32, shape=[1, self.batch_size])
         self.keep_prob = tf.placeholder(tf.float32)
 
         # Set up weights, network and training logits
-        self._init_weights()
         self.logits = self._inference_graph()
         self.loss = self._loss()
         self.optimizer = self._optimizer()
@@ -36,7 +33,7 @@ class Discriminator3d(object):
         self.sess = tf.Session()
         self.sess.run(init)
 
-    def _inference_graph(self, training):
+    def _inference_graph(self):
         with tf.name_scope('discriminator'):
             self.conv1 = conv_3d(self.x, 1, [4]*3, activation='leaky_relu', strides=2)
             self.conv2 = conv_3d(self.conv1, 64, [4]*3, activation='leaky_relu', strides=2)
@@ -52,7 +49,7 @@ class Discriminator3d(object):
     def _loss(self):
         # TODO: Include L2 regularization later
         # TODO: Add policy gradient buffer updates with discounted rewards
-        return tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(self.logits, self.y))
+        return tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=self.logits, labels=self.y))
     
     def _optimizer(self):
         return tf.train.AdamOptimizer(self.learning_rate)
