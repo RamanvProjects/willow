@@ -20,7 +20,8 @@ class Discriminator3d(object):
         self.input_shape = [self.batch_size, self.image_size,\
                             self.image_size, self.image_size, 1]
         self.x = tf.placeholder(tf.float32, shape=self.input_shape)
-        self.y = tf.placeholder(tf.float32, shape=[1, self.batch_size])
+        self.y = tf.placeholder(tf.float32, shape=[self.batch_size, 1])
+        # self.y = tf.placeholder(tf.float32, shape=[1, self.batch_size])
         self.keep_prob = tf.placeholder(tf.float32)
 
         # Set up weights, network and training logits
