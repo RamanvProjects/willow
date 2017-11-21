@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/shaders">
+        <file>shader.frag</file>
+        <file>shader.vert</file>
+        <file>ui.frag</file>
+        <file>ui.vert</file>
+        <file>cloud.frag</file>
+        <file>cloud.vert</file>
+    </qresource>
+</RCC>
