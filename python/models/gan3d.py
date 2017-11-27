@@ -76,3 +76,73 @@ class Discriminator3d(object):
         prediction = self.sess.run(self.logits, feed_dict={self.x: X, self.keep_prob: 1.0})
 
         return prediction
+
+class Generator3d(object):
+    def __init__(self, logging, batch_size, learning_rate, image_size, hidden_size, latent_size):
+        # Network Parameters
+        self.logging = logging
+        self.batch_size = batch_size
+        self.learning_rate = learning_rate
+        self.image_size, self.hidden_size = image_size, hidden_size
+        
+        # Placeholders for inputs
+        self.input_shape = [self.batch_size, self.latent_size]
+        self.output_shape = [self.batch_size, self.image_size,\
+                            self.image_size, self.image_size, 1]
+        self.x = tf.placeholder(tf.float32, shape=self.input_shape)
+        self.y = tf.placeholder(tf.float32, shape=self.output_shape)
+        # self.y = tf.placeholder(tf.float32, shape=[1, self.batch_size])
+        self.keep_prob = tf.placeholder(tf.float32)
+
+        # Set up weights, network and training logits
+        self.logits = self._inference_graph()
+        self.loss = self._loss()
+        self.optimizer = self._optimizer()
+
+        # Setting up instance
+        init = tf.initialize_all_variables()
+        self.sess = tf.Session()
+        self.sess.run(init)
+
+    def _inference_graph(self):
+        self.fc1 = fully_connected(self.x, self.image_size*3)
+        reshaped = reshape(self.fc1, [self.batch_size, self.image_size, self.image_size, self.image_size, 1]
+
+        with tf.name_scope('discriminator'):
+            self.conv1 = conv_3d(reshaped, 512, [4]*3, strides=2)
+            self.conv2 = conv_3d(self.conv1, 256, [4]*3, strides=2)
+            self.conv3 = conv_3d(self.conv2, 128, [4]*3, strides=2)
+            self.conv4 = conv_3d(self.conv3, 64, [4]*3, strides=2)
+            self.conv5 = conv_3d(self.conv4, 1, [4]*3, strides=2)
+
+        return self.conv5
+    
+    def _loss(self):
+        # TODO: Include L2 regularization later
+        # TODO: Add policy gradient buffer updates with discounted rewards
+        return tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=self.logits, labels=self.y))
+    
+    def _optimizer(self):
+        return tf.train.AdamOptimizer(self.learning_rate)
+
+    def partial_fit_step(self, X, Y):
+        """
+        Train network on batch input X and Y
+        """
+        cost, _ = self.sess.run([self.loss, self.optimizer],
+                                feed_dict={
+                                    self.x: X,
+                                    self.y: Y,
+                                    self.keep_prob: 0.8
+                                })
+        
+        return cost
+
+    def generate(self, X):
+        """
+        Predicts either single X or batch, returns probability of white and black winning
+        """
+
+        prediction = self.sess.run(self.logits, feed_dict={self.x: X, self.keep_prob: 1.0})
+
+        return prediction
