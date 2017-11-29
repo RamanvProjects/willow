@@ -29,8 +29,14 @@ void processCommandLine(int argc, char **argv, int &resolution, bool &visualize,
 
 ///home/bsheeran/Documents/CS2951w/Voxelizer/res/obj/tree.obj
 
-int main(int argc, char *argv[])
+int main(int argc, char *argv[], char **envp)
 {
+    for (char **env = envp; *env != 0; env++)
+    {
+      char *thisEnv = *env;
+      printf("%s\n", thisEnv);
+    }
+
     int resolution;
     bool visualize;
     std::string input;
