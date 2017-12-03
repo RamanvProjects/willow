@@ -4,22 +4,34 @@ import sys
 import os
 import json
 
-def convert(directory, executable):
+def convert(directory, executable, path):
     files = [f for f in os.listdir(directory)]
-    if not os.path.exists(directory + "/json"):
+    if (not os.path.exists(directory + "/json") and not path):
         os.makedirs(directory + "/json")
+    if (not os.path.exists(directory + "/path_json") and path):
+        os.makedirs(directory + "/path_json")
     for f in files:
         path_to_obj = os.path.abspath(directory + "/" + f);
         if path_to_obj.endswith('obj'):
             input_clo = " --input-obj " + path_to_obj 
-            output_path = directory + "/json/" + f + ".json";
+            if (path):
+                output_path = directory + "/path_json/" + f + ".csv";
+            else:
+                output_path = directory + "/json/" + f + ".json";
             output_clo = " --output-path " + output_path
-            os.system(executable + input_clo + output_clo)
+            if (path):
+                os.system(executable + input_clo + output_clo + " --path")
+            else:
+                os.system(executable + input_clo + output_clo)
 
 if __name__ == '__main__':
     if (len(sys.argv) < 3):
-        print "please give path to directory that contains the obj files you want to convert to JSON and the path to the converter executable"
+        print "please give path to directory that contains the obj files you want to convert to JSON and the path to the converter executable. Optionally also provide flag --path to generate paths instead of graphs jsons"
     else:
+
         directory = os.path.abspath(os.path.expanduser(sys.argv[1]))
         executable = os.path.abspath(os.path.expanduser(sys.argv[2]))
-        convert(directory, executable)
+        path = 0
+        if (len(sys.argv) > 3):
+            path = 1
+        convert(directory, executable, path)

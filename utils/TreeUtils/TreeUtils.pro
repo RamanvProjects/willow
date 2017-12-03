@@ -11,9 +11,11 @@ INCLUDEPATH += libs glm
 
 SOURCES += src/main.cpp \
     src/parser.cpp \
-    src/pointcloud.cpp
+    src/pointcloud.cpp \
+    src/pathparser.cpp
 
 HEADERS += \
     src/parser.h \
     src/CommonIncludes.h \
-    src/pointcloud.h
+    src/pointcloud.h \
+    src/pathparser.h
