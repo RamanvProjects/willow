@@ -13,26 +13,38 @@ void Parser::parseAndWrite(const std::string &obj, const std::string &output)
     std::vector<glm::vec3> vertices;
     std::vector<std::vector<size_t>> directedEdges;
     Parser::read(obj,vertices,directedEdges);
+    Parser::write(output,vertices,directedEdges);
+}
+
+void Parser::write(const std::__cxx11::string &path, std::vector<glm::vec3> &vertices, std::vector<std::vector<size_t> > &directedEdges)
+{
     std::ofstream file;
-    file.open(output);
+    file.open(path);
 //        file.write("{\n");
     file << "{\n";
     for(size_t i = 0; i < directedEdges.size(); i++)
     {
         std::vector<size_t> edges = directedEdges.at(i);
-        file << "\t" << glm::to_string(vertices[i]).substr(5) << " : [";
+        std::string key = glm::to_string(vertices[i]).substr(5);
+        key = key.substr(1, key.length()-2);
+        file << "\t\"" << key << "\" : [";
         for(std::vector<size_t>::iterator it = edges.begin(); it != edges.end(); ++it)
         {
-            file << glm::to_string(vertices[*it]).substr(5) << ",";
+            std::string value = glm::to_string(vertices[*it]).substr(5);
+            value = value.substr(1, value.length()-2);
+            file << "\"" << value << "\"";
+            if(*it != edges.back())
+            {
+                file << ",";
+            }
         }
-        file << glm::to_string(vertices[i]).substr(5) << "]\n";
+        file << "],\n";
     }
     file << "}\n";
     file.close();
-//        file.write("}");
 }
 
-void Parser::read(const std::string &path,std::vector<glm::vec3> &vertices, std::vector<std::vector<size_t>> &directedEdges)
+void Parser::read(const std::string &path, std::vector<glm::vec3> &vertices, std::vector<std::vector<size_t>> &directedEdges)
 {
     // Open the file
     QFile file(path.c_str());

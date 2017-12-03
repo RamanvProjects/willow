@@ -10,8 +10,10 @@ DEPENDPATH += libs glm
 INCLUDEPATH += libs glm
 
 SOURCES += src/main.cpp \
-    src/parser.cpp
+    src/parser.cpp \
+    src/pointcloud.cpp
 
 HEADERS += \
     src/parser.h \
-    src/CommonIncludes.h
+    src/CommonIncludes.h \
+    src/pointcloud.h
