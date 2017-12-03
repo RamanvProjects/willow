@@ -13,6 +13,9 @@ def convert(directory, executable, path):
     for f in files:
         path_to_obj = os.path.abspath(directory + "/" + f);
         if path_to_obj.endswith('obj'):
+
+            print "Evaluating: " + path_to_obj
+
             input_clo = " --input-obj " + path_to_obj 
             if (path):
                 output_path = directory + "/path_json/" + f + ".csv";
