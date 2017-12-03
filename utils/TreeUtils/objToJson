@@ -1,0 +1,26 @@
+#!/usr/bin/python
+
+import sys
+import os
+import json
+
+def convert(directory, executable):
+    files = [f for f in os.listdir(directory)]
+    if not os.path.exists(directory + "/json"):
+        os.makedirs(directory + "/json")
+    for f in files:
+        path_to_obj = os.path.abspath(directory + "/" + f);
+        if path_to_obj.endswith('obj'):
+            input_clo = " --input-obj " + path_to_obj 
+            output_path = directory + "/json/" + f + ".json";
+            print output_path
+            output_clo = " --output-path " + output_path
+            os.system(executable + input_clo + output_clo)
+
+if __name__ == '__main__':
+    if (len(sys.argv) < 3):
+        print "please give path to directory that contains the obj files you want to convert to JSON and the path to the converter executable"
+    else:
+        directory = os.path.abspath(os.path.expanduser(sys.argv[1]))
+        executable = os.path.abspath(os.path.expanduser(sys.argv[2]))
+        convert(directory, executable)
