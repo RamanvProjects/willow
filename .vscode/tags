@@ -6,27 +6,43 @@
 !_TAG_PROGRAM_VERSION	5.8	//
 Discriminator3d	../python/main.py	/^from models.gan3d import Discriminator3d$/;"	kind:namespace	line:1
 Discriminator3d	../python/models/gan3d.py	/^class Discriminator3d(object):$/;"	kind:class	line:8
+Generator3d	../python/models/gan3d.py	/^class Generator3d(object):$/;"	kind:class	line:80
 __init__	../python/models/gan3d.py	/^    def __init__(self, logging, batch_size, learning_rate, image_size, hidden_size):$/;"	kind:member	line:9
+__init__	../python/models/gan3d.py	/^    def __init__(self, logging, batch_size, learning_rate, image_size, hidden_size, latent_size):$/;"	kind:member	line:81
 __init__.py	../python/__init__.py	1;"	kind:file	line:1
 __init__.py	../python/models/__init__.py	1;"	kind:file	line:1
-_inference_graph	../python/models/gan3d.py	/^    def _inference_graph(self):$/;"	kind:member	line:36
-_loss	../python/models/gan3d.py	/^    def _loss(self):$/;"	kind:member	line:49
-_optimizer	../python/models/gan3d.py	/^    def _optimizer(self):$/;"	kind:member	line:54
+_inference_graph	../python/models/gan3d.py	/^    def _inference_graph(self):$/;"	kind:member	line:107
+_inference_graph	../python/models/gan3d.py	/^    def _inference_graph(self):$/;"	kind:member	line:37
+_loss	../python/models/gan3d.py	/^    def _loss(self):$/;"	kind:member	line:120
+_loss	../python/models/gan3d.py	/^    def _loss(self):$/;"	kind:member	line:50
+_optimizer	../python/models/gan3d.py	/^    def _optimizer(self):$/;"	kind:member	line:125
+_optimizer	../python/models/gan3d.py	/^    def _optimizer(self):$/;"	kind:member	line:55
 conv_3d	../python/models/gan3d.py	/^from tflearn.layers.conv import conv_3d, conv_3d_transpose$/;"	kind:namespace	line:2
 conv_3d_transpose	../python/models/gan3d.py	/^from tflearn.layers.conv import conv_3d, conv_3d_transpose$/;"	kind:namespace	line:2
-data	../python/main.py	/^data = dummy.generate_data(5, (64, 64, 64))$/;"	kind:variable	line:4
+csv	../utils/parser/parser.py	/^import csv, sys, glob, os, re$/;"	kind:namespace	line:3
+data	../python/main.py	/^data = dummy.generate_data(5, (64, 64, 64, 1))$/;"	kind:variable	line:4
 dummy	../python/main.py	/^import dummy$/;"	kind:namespace	line:2
 dummy.py	../python/dummy.py	1;"	kind:file	line:1
 gan3d.py	../python/models/gan3d.py	1;"	kind:file	line:1
+generate	../python/models/gan3d.py	/^    def generate(self, X):$/;"	kind:member	line:141
 generate_data	../python/dummy.py	/^def generate_data(n, size):$/;"	kind:function	line:3
+glob	../utils/parser/parser.py	/^import csv, sys, glob, os, re$/;"	kind:namespace	line:3
 init_bias	../python/models/utils.py	/^def init_bias(shape, value=0.1, name=None):$/;"	kind:function	line:6
 init_weight	../python/models/utils.py	/^def init_weight(shape, name=None):$/;"	kind:function	line:3
 k	../python/main.py	/^k = Discriminator3d(True, 5, 0.001, 64, 15)$/;"	kind:variable	line:5
 leaky_relu	../python/models/gan3d.py	/^from tflearn.activations import leaky_relu$/;"	kind:namespace	line:1
 main.py	../python/main.py	1;"	kind:file	line:1
 np	../python/dummy.py	/^import numpy as np$/;"	kind:namespace	line:1
-partial_fit_step	../python/models/gan3d.py	/^    def partial_fit_step(self, X, Y):$/;"	kind:member	line:57
-predict	../python/models/gan3d.py	/^    def predict(self, X):$/;"	kind:member	line:70
+os	../utils/parser/parser.py	/^import csv, sys, glob, os, re$/;"	kind:namespace	line:3
+parameters	../utils/parser/parser.py	/^parameters = [$/;"	kind:variable	line:13
+parse	../utils/parser/parser.py	/^def parse(inDir, outDir, parameters):$/;"	kind:function	line:25
+parser.py	../utils/parser/parser.py	1;"	kind:file	line:1
+partial_fit_step	../python/models/gan3d.py	/^    def partial_fit_step(self, X, Y):$/;"	kind:member	line:128
+partial_fit_step	../python/models/gan3d.py	/^    def partial_fit_step(self, X, Y):$/;"	kind:member	line:58
+predict	../python/models/gan3d.py	/^    def predict(self, X):$/;"	kind:member	line:71
+re	../utils/parser/parser.py	/^import csv, sys, glob, os, re$/;"	kind:namespace	line:3
+sketch-to-vertices.py	../python/models/sketch-to-vertices.py	1;"	kind:file	line:1
+sys	../utils/parser/parser.py	/^import csv, sys, glob, os, re$/;"	kind:namespace	line:3
 tf	../python/models/gan3d.py	/^import tensorflow as tf$/;"	kind:namespace	line:4
 tf	../python/models/utils.py	/^import tensorflow as tf$/;"	kind:namespace	line:1
 tl	../python/models/gan3d.py	/^import tflearn as tl$/;"	kind:namespace	line:5
