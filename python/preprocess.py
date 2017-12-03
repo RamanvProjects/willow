@@ -1,3 +1,5 @@
+""" To parse weird data is to become weird data
+"""
 from collections import defaultdict
 import json
 
