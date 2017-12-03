@@ -78,6 +78,8 @@ class WGAN(object):
     def _train_operations(self):
         self.clip = [weight.assign(tf.clip_by_value(weight, -self.clip_weight, self.clip_weight)) for weight in self.discriminator_weights]
 
+        # TODO(vramanuj): Update separately
+        # TODO(vramanuj): Weight clipping
         self.disc_train_op = tf.train.RMSPropOptimizer().minimize(self.disc_loss)
         self.gen_train_op = tf.train.RMSPropOptimizer().minimize(self.gen_loss)
 
@@ -100,5 +102,8 @@ class WGAN(object):
         
         return loss
         
-    def generate(self):
-        pass
+    def generate(self, z=None, n=1):
+        if z is None:
+            z = np.random.rand(n, self.latent_size)
+
+        return self.sess.run(self.generator, feed_dict={self.latent_input: z})
