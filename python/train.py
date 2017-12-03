@@ -1,3 +1,4 @@
+from data import Data
 from models.gan import Model, WGAN
 from models.factories import gen_point_cloud, disc_point_cloud
 import tensorflow as tf
@@ -15,12 +16,14 @@ G = Model(gen_point_cloud, [-1, 100], name='generator')
 D = Model(disc_point_cloud, [-1, 3, 256], name='discriminator')
 gan = WGAN(G, D, [-1, 3, 256], clip_weight=1e-2)
 
-n_critic = FLAGS.n_critic
 batch_size = FLAGS.batch_size
+
+# Waiting for data
+data = Data([1, 2, 3], FLAGS.batch_size)
 
 for i in range(FLAGS.num_epochs):
     for j in data.num_batches():
-        for k in range(n_critic):
+        for k in range(FLAGS.n_critic):
             batch_x = data.next_batch()
             loss_d = gan.partial_fit_discriminator(batch_x)
 
