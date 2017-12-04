@@ -4,6 +4,10 @@ def maybe_make_dir(directory):
     if not gfile.Exists(directory):
         gfile.MakeDirs(directory)
 
+def clear_dirs(directory):
+    if gfile.Exists(directory):
+        gfile.DeleteRecursively(directory)
+
 def init_weight(shape, name=None):
     return Variable(truncated_normal(shape, stddev=0.1), name=name)
 

@@ -7,7 +7,7 @@ from os.path import join
 from utils import maybe_make_dir
 import tensorflow as tf
 import logging
-import numpy as n
+import numpy as np
 
 class Model(object):
     def __init__(self, nn_factory, input_shape, name):
@@ -21,11 +21,11 @@ class Model(object):
 
         self.input_shape = input_shape
 
-    def add_placeholder(self, name, logits):
+    def add_placeholder(self, name, logits, front=None):
         """ Sets placeholders and returns handles to placeholders (with names)
         """
 
-        self._inference_graph(logits, name)
+        self._inference_graph(logits, name, front=front)
 
         return self.placeholders[name]
 
@@ -34,16 +34,19 @@ class Model(object):
         """
         return self.placeholders
     
-    def _inference_graph(self, input, name):
+    def _inference_graph(self, input, name, front=None):
         with tf.variable_scope(self.name) as scope:
             scope.reuse_variables()
-            self.placeholders[name] = (input, self.factory(input))
+            if front is None:
+                front = input
+
+            self.placeholders[name] = (front, self.factory(input))
 
             return self.placeholders[name][1]
 
 
 class WGAN(object):
-    def __init__(self, G, D, data_shape, learning_rate=1e-5, clip_weight=1.0, logger=None, saver=None, summary_dir='checkpoints/summaries', name='wgan'):
+    def __init__(self, G, D, learning_rate=5e-5, clip_weight=1.0, logger=None, saver=None, summary_dir='checkpoints/summaries', name='wgan'):
         if logger is None:
             self.logger = logging.getLogger(__name__)
         else:
@@ -60,7 +63,6 @@ class WGAN(object):
         self.name = name
 
         # Preparing the logits
-        self.data_shape = data_shape
         self.clip_weight = clip_weight
         self._init_logits()
         self._init_weights()
@@ -86,9 +88,8 @@ class WGAN(object):
         self.sess.run(init)
 
     def _init_logits(self):
-        self.discriminator.add_placeholder("fake", self.generator.default_logits)
-
-        print "SHAPE:", self.discriminator.input_shape
+        self.discriminator.add_placeholder("fake", self.generator.default_logits, front=self.generator.default_placeholder)
+        print "SHAPE:", self.generator.default_placeholder
         real_placeholder = tf.placeholder(dtype=tf.float32, shape=self.discriminator.input_shape, name="pato")
         self.discriminator.add_placeholder("real", real_placeholder)
 
@@ -103,24 +104,22 @@ class WGAN(object):
 
     def _init_summaries(self):
         with tf.name_scope("summaries"):
-            self.latent_sum = tf.summary.scalar("Latent Summary", self.latent_input)
             self.gen_sum = tf.summary.scalar("Generator Loss", self.gen_loss)
-            self.gen_weight_sum = tf.summary.histogram("Generator Weight Summary", self.generator_weights)
+            self.gen_weight_sum = tf.summary.histogram("Generator Weight Summary", map(tf.reduce_sum, self.generator_weights))
 
             self.disc_sum = tf.summary.scalar("Discriminator Loss", self.disc_loss)
-            self.disc_weight_sum = tf.summary.histogram("Discriminator Weight Summary", self.discriminator_weights)
+            self.disc_weight_sum = tf.summary.histogram("Discriminator Weight Summary", map(tf.reduce_sum, self.discriminator_weights))
+
+            self.gen_summary_op = tf.summary.merge([self.gen_sum, self.gen_weight_sum])
+            self.disc_summary_op = tf.summary.merge([self.disc_sum, self.disc_weight_sum])
 
     def _loss(self):
         self.latent_input, fake_D = self.discriminator.placeholders["fake"]
         self.real_input, real_D = self.discriminator.placeholders["real"]
 
-        print 
-        print self.discriminator.placeholders
+        print "DISC PLACEHOLDERS", self.discriminator.placeholders
         self.gen_loss = tf.reduce_mean(fake_D)
-        self.disc_loss = tf.reduce_mean(fake_D - real_D)
-
-        self.gen_summary_op = tf.summary.merge([self.latent_sum, self.gen_sum, self.gen_weight_sum])
-        self.disc_summary_op = tf.summary.merge_all([self.latent_sum, self.disc_sum, self.disc_weight_sum])
+        self.disc_loss = tf.reduce_mean(real_D - fake_D)
 
     def _train_operations(self):
         self.clip = [weight.assign(tf.clip_by_value(weight, -self.clip_weight, self.clip_weight)) for weight in self.discriminator_weights]
@@ -134,17 +133,17 @@ class WGAN(object):
         if summarize:
             fetches.append(self.disc_summary_op)
 
+        self.sess.run(self.clip)
         noise = np.random.rand(len(X), self.latent_size)
         fetched = self.sess.run(fetches,
                                 feed_dict={
                                     self.latent_input: noise,
                                     self.real_input: X
                                 })
-        self.sess.run(self.clip)
         self.step += 1
 
         if summarize:
-            self.write_summary(fetched[2])
+            self.write_summary(fetched[2], 'checkpoints/summaries')
 
         return fetched[0]
     
@@ -154,22 +153,22 @@ class WGAN(object):
             fetches.append(self.gen_summary_op)
 
         noise = np.random.rand(n_batch, self.latent_size)
-        loss, _ = self.sess.run([self.gen_loss, self.gen_train_op],
+        fetched = self.sess.run(fetches,
                                 feed_dict={
                                     self.latent_input: noise,
                                 })
         self.step += 1
 
         if summarize:
-            self.write_summary(fetched[2])
+            self.write_summary(fetched[2], 'checkpoints/summaries')
 
-        return loss
+        return fetched[0]
         
     def generate(self, z=None, n=1):
         if z is None:
             z = np.random.rand(n, self.latent_size)
 
-        return self.sess.run(self.generator, feed_dict={self.latent_input: z})
+        return self.sess.run(self.generator.default_logits, feed_dict={self.latent_input: z})
     
     def save_model(self, directory='checkpoints/models'):
         filename = "%s_%s" % (self.name, self.now().strftime("%Y-%m-%d-%H%M"))
@@ -178,5 +177,8 @@ class WGAN(object):
         
         self.saver.save(self.sess, join(directory, filename))
 
-    def write_summary(self, summary, directory):
-        self.writer.add_summary(summary, global_step=self.step)
+    def write_summary(self, summary, directory, train=True):
+        if train:
+            self.train_writer.add_summary(summary, global_step=self.step)
+        else:
+            self.test_writer.add_summary(summary, global_step=self.step)
