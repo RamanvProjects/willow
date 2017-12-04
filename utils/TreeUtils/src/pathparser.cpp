@@ -22,21 +22,67 @@ void PathParser::write(const std::__cxx11::string &path, std::vector<glm::vec3> 
 {
     std::ofstream file;
     file.open(path);
+    std::vector<std::string> strings;
+
+    // Generate list of properly formatted strings
     for(size_t i = 0; i < paths.size(); i++)
     {
-        if (i > 0){
-            file << "START" << " ";
-            std::vector<glm::vec3> currVertices = paths.at(i);
-            for(std::vector<glm::vec3>::iterator it = currVertices.begin(); it != currVertices.end(); ++it)
-            {
-                std::string value = glm::to_string(*it).substr(5);
-                value.erase(std::remove(value.begin(), value.end(), ' '), value.end());
-                file << value << " ";
+        std::vector<glm::vec3> currVertices = paths.at(i);
+        if (currVertices.size() == 0){
+            continue;
+        }
+        std::string pathString;
+        for(std::vector<glm::vec3>::iterator it = currVertices.begin(); it != currVertices.end(); ++it)
+        {
+            std::string value = glm::to_string(*it).substr(5);
+            value.erase(std::remove(value.begin(), value.end(), ' '), value.end());
+            pathString = pathString + " " + value;
+        }
+//        file << pathString << "\n";
+        strings.push_back(pathString);
+    }
+
+    // For strings, check for substrings
+    std::vector<std::string> allstrings = strings;
+    int unique = 1;
+    for(size_t i=0; i < strings.size(); i++)
+    {
+        unique = 1;
+        std::string string = strings.at(i);
+        for(size_t j=0; j < allstrings.size(); j++){
+            std::string otherstring = allstrings.at(j);
+            std::size_t found = otherstring.find(string);
+
+            // If found at position 0, it's a substring match, or identical
+            if ((found == 0) && (string.length() != otherstring.length())){
+//                file << "found " << string << " in " << otherstring << "\n";
+                unique = 0;
+                continue;
             }
-            file << "END" << "\n";
+        }
+        if (unique > 0){
+            string.erase(string.begin(), std::find_if(string.begin(), string.end(), std::bind1st(std::not_equal_to<char>(), ' ')));
+            file << "START "  << string << " END\n";
         }
     }
-    file << "\n";
+
+    // Then write to file with correct csv formatting
+
+//    for(size_t i = 0; i < paths.size(); i++)
+//    {
+//        if (i > 0){
+//            file << "START" << " ";
+//            std::vector<glm::vec3> currVertices = paths.at(i);
+//            for(std::vector<glm::vec3>::iterator it = currVertices.begin(); it != currVertices.end(); ++it)
+//            {
+//                std::string value = glm::to_string(*it).substr(5);
+//                value.erase(std::remove(value.begin(), value.end(), ' '), value.end());
+//                file << value << " ";
+//            }
+//            file << "END" << "\n";
+//        }
+//    }
+//    file << "\n";
     file.close();
 }
 
