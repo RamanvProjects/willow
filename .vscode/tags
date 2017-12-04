@@ -50,7 +50,7 @@ csv	../utils/parser/parser.py	/^import csv, sys, glob, os, re$/;"	kind:namespace
 data	../python/main.py	/^data = dummy.generate_data(5, (64, 64, 64, 1))$/;"	kind:variable	line:4
 data	../python/train.py	/^data = Data([1, 2, 3], FLAGS.batch_size)$/;"	kind:variable	line:22
 data.py	../python/data.py	1;"	kind:file	line:1
-defaultdict	../python/preprocess.py	/^from collections import defaultdict$/;"	kind:namespace	line:1
+defaultdict	../python/preprocess.py	/^from collections import defaultdict$/;"	kind:namespace	line:3
 directory	../utils/TreeUtils/objToJson	/^        directory = os.path.abspath(os.path.expanduser(sys.argv[1]))$/;"	kind:variable	line:24
 disc_point_cloud	../python/models/factories.py	/^def disc_point_cloud(input):$/;"	kind:function	line:27
 disc_point_cloud	../python/train.py	/^from models.factories import gen_point_cloud, disc_point_cloud$/;"	kind:namespace	line:3
@@ -65,19 +65,19 @@ gan.py	../python/models/gan.py	1;"	kind:file	line:1
 gan3d.py	../python/models/gan3d.py	1;"	kind:file	line:1
 gen_point_cloud	../python/models/factories.py	/^def gen_point_cloud(input):$/;"	kind:function	line:10
 gen_point_cloud	../python/train.py	/^from models.factories import gen_point_cloud, disc_point_cloud$/;"	kind:namespace	line:3
-generate	../python/models/gan.py	/^    def generate(self):$/;"	kind:member	line:105
+generate	../python/models/gan.py	/^    def generate(self, z=None, n=1):$/;"	kind:member	line:105
 generate	../python/models/gan3d.py	/^    def generate(self, X):$/;"	kind:member	line:141
 generate_data	../python/dummy.py	/^def generate_data(n, size):$/;"	kind:function	line:3
 get_placeholders	../python/models/gan.py	/^    def get_placeholders(self):$/;"	kind:member	line:28
 glob	../utils/parser/parser.py	/^import csv, sys, glob, os, re$/;"	kind:namespace	line:3
 init_bias	../python/models/utils.py	/^def init_bias(shape, value=0.1, name=None):$/;"	kind:function	line:6
 init_weight	../python/models/utils.py	/^def init_weight(shape, name=None):$/;"	kind:function	line:3
-j	../python/preprocess.py	/^j = defaultdict(list)$/;"	kind:variable	line:7
-json	../python/preprocess.py	/^import json$/;"	kind:namespace	line:2
+j	../python/preprocess.py	/^j = defaultdict(list)$/;"	kind:variable	line:9
+json	../python/preprocess.py	/^import json$/;"	kind:namespace	line:4
 json	../utils/TreeUtils/objToJson	/^import json$/;"	kind:namespace	line:5
 k	../python/main.py	/^k = Discriminator3d(True, 5, 0.001, 64, 15)$/;"	kind:variable	line:5
-k	../python/preprocess.py	/^k = json.loads(test_json)$/;"	kind:variable	line:6
-l	../python/preprocess.py	/^    l = tuple(map(float, l.split(',')))$/;"	kind:variable	line:10
+k	../python/preprocess.py	/^k = json.loads(test_json)$/;"	kind:variable	line:8
+l	../python/preprocess.py	/^    l = tuple(map(float, l.split(',')))$/;"	kind:variable	line:12
 leaky_relu	../python/models/factories.py	/^from tflearn.activations import leaky_relu$/;"	kind:namespace	line:5
 leaky_relu	../python/models/gan3d.py	/^from tflearn.activations import leaky_relu$/;"	kind:namespace	line:1
 loss_d	../python/train.py	/^            loss_d = gan.partial_fit_discriminator(batch_x)$/;"	kind:variable	line:28
@@ -107,7 +107,7 @@ shuffle	../python/data.py	/^from random import shuffle$/;"	kind:namespace	line:5
 sketch-to-vertices.py	../python/models/sketch-to-vertices.py	1;"	kind:file	line:1
 sys	../utils/TreeUtils/objToJson	/^import sys$/;"	kind:namespace	line:3
 sys	../utils/parser/parser.py	/^import csv, sys, glob, os, re$/;"	kind:namespace	line:3
-test_json	../python/preprocess.py	/^test_json = open('data\/json\/graph.12001.obj.json').read() # '{"1,2,3":["1,2,3"], "4,6,5":["1,2,3","8,9,10"]}'$/;"	kind:variable	line:4
+test_json	../python/preprocess.py	/^test_json = open('data\/json\/graph.12001.obj.json').read() # '{"1,2,3":["1,2,3"], "4,6,5":["1,2,3","8,9,10"]}'$/;"	kind:variable	line:6
 tf	../python/models/factories.py	/^import tensorflow as tf$/;"	kind:namespace	line:8
 tf	../python/models/gan.py	/^import tensorflow as tf$/;"	kind:namespace	line:5
 tf	../python/models/gan3d.py	/^import tensorflow as tf$/;"	kind:namespace	line:4

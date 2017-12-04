@@ -5,7 +5,8 @@ Author: Vivek Ramanujan, (Pato)
 from random import shuffle
 
 class Data(object):
-    def __init__(self, data, batch_size, shuf=True):
+    def __init__(self, data, batch_size, shuf=True, logger=None):
+        self.logger = logger
         self.data = data
         self.shuffle = shuf
         if self.shuffle:
@@ -20,6 +21,7 @@ class Data(object):
     
     def next_batch(self):
         if self.curr_idx + self.batch_size > self.size:
+            self.logger.info("Data reset to index 0")
             self.curr_idx = 0
             if self.shuffle:
                 self.data = shuffle(self.data)
