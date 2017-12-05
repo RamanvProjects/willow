@@ -1,7 +1,7 @@
 """ To parse weird data is to become weird data
 """
 from collections import defaultdict
-from numpy import vstack, argsort
+from numpy import vstack, argsort, flipud, rot90, zeros, concatenate
 import json
 from os import listdir, path
 
@@ -15,7 +15,7 @@ def parse_dir(dir_name):
 			print "Parsing file: ", file_name
 			parsed_trees.append(parse_file(full_path))
 
-		# if len(parsed_trees) == 10: # testing
+		# if len(parsed_trees) == 220: # testing
 		# 	return parsed_trees
 
 	print "Finised parsing %s files." % len(parsed_trees)
@@ -35,11 +35,21 @@ def parse_file(file_name):
 
 	verts = vstack(j.keys())
 	sorted_verts = verts[argsort(verts[:, 1])]
+	# verts = flipud(rot90(j.keys()))
+	# sorted_verts = verts[:, argsort(verts[1, :])]
+
+	# TODO if not 256, add padding
+	pad_size = 256 - len(j.keys())
+	if pad_size > 0:
+		padding = zeros((pad_size, 3))
+		sorted_verts = concatenate((padding, verts), axis=0)
+		# padding = zeros((3, pad_size))
+		# sorted_verts = concatenate((padding, verts), axis=1)
 
 	return sorted_verts
 
 
 
 # Testing one file
-# print parse_file('data/json/graph.00001.obj.json')
+# print parse_file('defaultdictta/json/graph.00001.obj.json')
 
