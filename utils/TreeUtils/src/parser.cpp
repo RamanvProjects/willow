@@ -7,7 +7,6 @@
 #include <fstream>
 #include <QStringList>
 
-
 void Parser::parseObjAndWriteJson(const std::string &obj, const std::string &output)
 {
     std::vector<glm::vec3> vertices;
