@@ -21,7 +21,7 @@ class Data(object):
     
     def next_batch(self):
         if self.curr_idx + self.batch_size > self.size:
-            # self.logger.info("Data reset to index 0")
+            self.logger.info("Data reset to index 0")
             self.curr_idx = 0
             if self.shuffle:
                 shuffle(self.data)
