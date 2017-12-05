@@ -10,9 +10,9 @@ class Data(object):
         self.data = data
         self.shuffle = shuf
         if self.shuffle:
-            self.data = shuffle(self.data)
+            self.data = shuffle(data)
 
-        self.size = len(self.data)
+        self.size = len(data)
         self.batch_size = batch_size
         self.curr_idx = 0
 
