@@ -23,25 +23,32 @@ def gen_point_cloud(input):
     fc3_2 = fully_connected(fc2_2, 256, activation='relu')
     fc3_3 = fully_connected(fc2_3, 256, activation='relu')
 
-    concat = tf.concat([fc3_1, fc3_2, fc3_3], axis=2)
+    # concat = tf.concat([fc3_1, fc3_2, fc3_3], axis=2)
+    concat = tf.stack([fc3_1, fc3_2, fc3_3], axis=2)
 
     return concat
 
 def disc_point_cloud(input):
-    leaky_relu = lambda x: leaky_relu(x, alpha=0.2, name="LeakyReLu")
-    fc3_1 = fully_connected(input[:, 0, :], 256, activation=leaky_relu)
-    fc3_2 = fully_connected(input[:, 1, :], 256, activation=leaky_relu)
-    fc3_3 = fully_connected(input[:, 2, :], 256, activation=leaky_relu) 
+    print "SHAPE INPUT: ", input.shape
+    # leaky_relu = lambda x: leaky_relu(x, alpha=0.2, name="LeakyReLu")
+    leaky_relu_lam = lambda x: leaky_relu(x, alpha=0.2, name="LeakyReLu")
+    # fc3_1 = fully_connected(input[:, 0, :], 256, activation=leaky_relu_lam)
+    # fc3_2 = fully_connected(input[:, 1, :], 256, activation=leaky_relu_lam)
+    # fc3_3 = fully_connected(input[:, 2, :], 256, activation=leaky_relu_lam) 
+    
+    fc3_1 = fully_connected(input[:, :, 0], 256, activation=leaky_relu_lam)
+    fc3_2 = fully_connected(input[:, :, 1], 256, activation=leaky_relu_lam)
+    fc3_3 = fully_connected(input[:, :, 2], 256, activation=leaky_relu_lam) 
 
-    fc2_1 = fully_connected(fc3_1, 128, activation=leaky_relu)
-    fc2_2 = fully_connected(fc3_2, 128, activation=leaky_relu)
-    fc2_3 = fully_connected(fc3_3, 128, activation=leaky_relu)
+    fc2_1 = fully_connected(fc3_1, 128, activation=leaky_relu_lam)
+    fc2_2 = fully_connected(fc3_2, 128, activation=leaky_relu_lam)
+    fc2_3 = fully_connected(fc3_3, 128, activation=leaky_relu_lam)
 
-    fc1_1 = fully_connected(fc2_1, 64, activation=leaky_relu)
-    fc1_2 = fully_connected(fc2_2, 64, activation=leaky_relu)
-    fc1_3 = fully_connected(fc2_3, 64, activation=leaky_relu)
+    fc1_1 = fully_connected(fc2_1, 64, activation=leaky_relu_lam)
+    fc1_2 = fully_connected(fc2_2, 64, activation=leaky_relu_lam)
+    fc1_3 = fully_connected(fc2_3, 64, activation=leaky_relu_lam)
 
-    concat = tf.concat([fc1_1, fc1_2, fc1_3], axis=2)
+    concat = tf.concat([fc1_1, fc1_2, fc1_3], axis=1)
     reshaped = tf.reshape(concat, [-1, 64*3])
     fc_out = fully_connected(reshaped, 1)
 
