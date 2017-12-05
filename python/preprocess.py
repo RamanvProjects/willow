@@ -3,14 +3,16 @@
 from collections import defaultdict
 from numpy import vstack, argsort
 import json
-from os import listdir 
+from os import listdir
+from os.path import join
 
 # test_json = open('data/json/graph.00001.obj.json').read() # '{"1,2,3":["1,2,3"], "4,6,5":["1,2,3","8,9,10"]}'
 
 def parse_dir(dir_name):
 	parsed_trees = []
 	for file_name in listdir(dir_name):
-		parsed_trees.append(process_file(file_name))
+		print "Parsing file: ", file_name
+		parsed_trees.append(parse_file(join(dir_name, file_name)))
 	return parsed_trees
 
 def parse_file(file_name):
@@ -33,5 +35,5 @@ def parse_file(file_name):
 
 
 # Testing one file
-print parse_file('data/json/graph.00001.obj.json')
+# print parse_file('data/json/graph.00001.obj.json')
 

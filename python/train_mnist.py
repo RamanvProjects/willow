@@ -1,7 +1,6 @@
 from data import Data
 from models.gan import Model, WGAN
-from models.factories import gen_point_cloud, disc_point_cloud
-from preprocess import parse_dir
+from models.factories import gen_point_cloud, disc_point_cloud, mnist_disc, mnist_gen
 from PIL import Image
 from tqdm import tqdm
 import logging
@@ -27,7 +26,6 @@ flags.DEFINE_integer('latent_size', 100, 'Size of the latent vector')
 flags.DEFINE_integer('save_step', 50, 'Save every (blank) batches')
 flags.DEFINE_integer('summary_step', 20, 'Summarize every (blank) batches')
 flags.DEFINE_integer('print_every', 10, 'Print every (blank) batches')
-flags.DEFINE_string('data_dir', '../data/json', 'Directory containing data files, one tree per file')
 
 # G = Model(gen_point_cloud, [-1, 100], name='generator')
 # D = Model(disc_point_cloud, [-1, 3, 256], name='discriminator')
@@ -36,10 +34,11 @@ flags.DEFINE_string('data_dir', '../data/json', 'Directory containing data files
 batch_size = FLAGS.batch_size
 
 # Waiting for data
-points_per_tree = parse_dir(FLAGS.data_dir)
-data = Data(points_per_tree, FLAGS.batch_size, logger=logger)
-G = Model(gen_point_cloud, [None, 100], name='generator')
-D = Model(disc_point_cloud, [None, 784], name='discriminator')
+# data = Data([1, 2, 3], FLAGS.batch_size, logger=logger)
+from tensorflow.examples.tutorials.mnist import input_data
+data = input_data.read_data_sets('MNIST_data/')
+G = Model(mnist_gen, [None, 100], name='generator')
+D = Model(mnist_disc, [None, 784], name='discriminator')
 gan = WGAN(G, D, clip_weight=FLAGS.clip_weight)
 
 for epoch in tqdm(range(FLAGS.num_epochs), desc="Epoch"):
