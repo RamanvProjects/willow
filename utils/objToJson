@@ -16,12 +16,12 @@ def convert(directory, executable, path):
 
             print "Evaluating: " + path_to_obj
 
-            input_clo = " --input-obj " + path_to_obj 
+            input_clo = " --input_path " + path_to_obj
             if (path):
                 output_path = directory + "/path_json/" + f + ".csv";
             else:
                 output_path = directory + "/json/" + f + ".json";
-            output_clo = " --output-path " + output_path
+            output_clo = " --output_path " + output_path
             if (path):
                 os.system(executable + input_clo + output_clo + " --path")
             else:
