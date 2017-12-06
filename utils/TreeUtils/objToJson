@@ -15,7 +15,7 @@ def convert(directory, executable):
             output_path = directory + "/json/" + f + ".json";
             print output_path
             output_clo = " --output-path " + output_path
-            os.system(executable + input_clo + output_clo)
+            os.system(executable + " --parse true" + input_clo + output_clo)
 
 if __name__ == '__main__':
     if (len(sys.argv) < 3):

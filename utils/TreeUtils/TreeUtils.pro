@@ -1,6 +1,7 @@
 TEMPLATE = app
 CONFIG += console c++14
 CONFIG -= app_bundle
+CONFIG += debug_and_release
 
 LIBS += \
        -lboost_program_options\
