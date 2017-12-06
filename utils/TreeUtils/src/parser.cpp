@@ -7,14 +7,6 @@
 #include <fstream>
 #include <QStringList>
 
-void Parser::parseObjAndWriteJson(const std::string &obj, const std::string &output)
-{
-    std::vector<glm::vec3> vertices;
-    std::vector<std::vector<size_t>> directedEdges;
-    Parser::readObj(obj,vertices,directedEdges);
-    Parser::writeJson(output,vertices,directedEdges);
-}
-
 void Parser::writeJson(const std::__cxx11::string &path, std::vector<glm::vec3> &vertices, std::vector<std::vector<size_t> > &directedEdges)
 {
     std::ofstream file;

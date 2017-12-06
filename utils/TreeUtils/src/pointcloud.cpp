@@ -33,13 +33,21 @@ void PointCloud::generateEdges(std::vector<std::vector<size_t>> &directedEdges)
     const size_t num_nodes = m_points.size();
     std::vector<Edge> edges = std::vector<Edge>();
     std::vector<float> weights = std::vector<float>();
+    float farthest = 0.f;
+    for(auto it = m_points.begin(); it != m_points.end(); ++it)
+    {
+        const glm::vec3 v = *it;
+        farthest = glm::max(farthest, glm::length(v));
+    }
+    farthest = farthest * .1f;
     for(size_t i = 0; i < num_nodes; i++)
     {
         for(size_t j = i+1; j < num_nodes; j++)
         {
             edges.push_back(Edge(i,j));
-            weights.push_back(approximateCost(i,j));
+            weights.push_back(approximateCost(i,j, farthest));
         }
+
     }
     Graph g(&edges.front(), &edges.back(), &weights.front(), num_nodes);
     std::vector<vertex_descriptor> p(num_vertices(g));
@@ -59,8 +67,9 @@ void PointCloud::generateEdges(std::vector<std::vector<size_t>> &directedEdges)
     }
 }
 
+const glm::vec3 origin = glm::vec3(0.f);
 
-float PointCloud::approximateCost(const size_t i0, const size_t i1)
+float PointCloud::approximateCost(const size_t i0, const size_t i1, const float weight)
 {
     const glm::vec3 a = m_points[i0];
     const glm::vec3 b = m_points[i1];
@@ -69,5 +78,5 @@ float PointCloud::approximateCost(const size_t i0, const size_t i1)
     {
         return distance;
     }
-    return distance + distance*glm::distance2(glm::normalize(a),glm::normalize(b));
+    return distance + weight * glm::distance2(origin,glm::normalize(b));
 }
