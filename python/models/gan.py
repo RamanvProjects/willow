@@ -118,14 +118,14 @@ class WGAN(object):
         self.real_input, real_D = self.discriminator.placeholders["real"]
 
         print "DISC PLACEHOLDERS", self.discriminator.placeholders
-        self.gen_loss = tf.reduce_mean(fake_D)
-        self.disc_loss = tf.reduce_mean(real_D - fake_D)
+        self.gen_loss = -tf.reduce_mean(fake_D)
+        self.disc_loss = tf.reduce_mean(-real_D + fake_D)
 
     def _train_operations(self):
         self.clip = [weight.assign(tf.clip_by_value(weight, -self.clip_weight, self.clip_weight)) for weight in self.discriminator_weights]
 
         self.optimizer = tf.train.RMSPropOptimizer(self.lr)
-        self.disc_train_op = self.optimizer.minimize(self.disc_loss, var_list=self.discriminator_weights)
+        self.disc_train_op = tf.train.RMSPropOptimizer(self.lr/5).minimize(self.disc_loss, var_list=self.discriminator_weights)
         self.gen_train_op = self.optimizer.minimize(self.gen_loss, var_list=self.generator_weights)
 
     def partial_fit_discriminator(self, X, summarize=False):

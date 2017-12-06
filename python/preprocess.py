@@ -27,10 +27,10 @@ def parse_file(file_name):
 	j = defaultdict(list)
 
 	for l, v in k.iteritems():
-	    l = tuple(map(float, l.split(',')))
+	    l = tuple(map(float, l.split(', ')))
 	    
 	    for q in v:
-	        a, b, c = map(float, q.split(','))
+	        a, b, c = map(float, q.split(', '))
 	        j[l].append((a, b, c))
 
 	verts = vstack(j.keys())
@@ -42,7 +42,7 @@ def parse_file(file_name):
 	pad_size = 256 - len(j.keys())
 	if pad_size > 0:
 		padding = zeros((pad_size, 3))
-		sorted_verts = concatenate((padding, verts), axis=0)
+		sorted_verts = concatenate((padding, sorted_verts), axis=0)
 		# padding = zeros((3, pad_size))
 		# sorted_verts = concatenate((padding, verts), axis=1)
 
@@ -51,5 +51,5 @@ def parse_file(file_name):
 
 
 # Testing one file
-# print parse_file('defaultdictta/json/graph.00001.obj.json')
+print parse_file('data/json/graph.00002.obj.json')
 
