@@ -4,117 +4,155 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.8	//
-D	../python/train.py	/^D = Model(disc_point_cloud, [-1, 3, 256], name='discriminator')$/;"	kind:variable	line:16
+D	../python/train.py	/^D = Model(mnist_disc, [None, 784], name='discriminator')$/;"	kind:variable	line:41
 Data	../python/data.py	/^class Data(object):$/;"	kind:class	line:7
 Data	../python/train.py	/^from data import Data$/;"	kind:namespace	line:1
 Discriminator3d	../python/main.py	/^from models.gan3d import Discriminator3d$/;"	kind:namespace	line:1
 Discriminator3d	../python/models/gan3d.py	/^class Discriminator3d(object):$/;"	kind:class	line:8
 FLAGS	../python/models/sketch-to-vertices.py	/^FLAGS = tf.app.flags.FLAGS$/;"	kind:variable	line:9
-FLAGS	../python/train.py	/^FLAGS = flags.FLAGS$/;"	kind:variable	line:7
-G	../python/train.py	/^G = Model(gen_point_cloud, [-1, 100], name='generator')$/;"	kind:variable	line:15
+FLAGS	../python/train.py	/^FLAGS = flags.FLAGS$/;"	kind:variable	line:19
+G	../python/train.py	/^G = Model(mnist_gen, [None, 100], name='generator')$/;"	kind:variable	line:40
 Generator3d	../python/models/gan3d.py	/^class Generator3d(object):$/;"	kind:class	line:80
-Model	../python/models/gan.py	/^class Model(object):$/;"	kind:class	line:8
+Image	../python/train.py	/^from PIL import Image$/;"	kind:namespace	line:4
+Model	../python/models/gan.py	/^class Model(object):$/;"	kind:class	line:12
 Model	../python/train.py	/^from models.gan import Model, WGAN$/;"	kind:namespace	line:2
 SketchToPointsFC	../python/models/sketch-to-vertices.py	/^class SketchToPointsFC(object):$/;"	kind:class	line:11
-WGAN	../python/models/gan.py	/^class WGAN(object):$/;"	kind:class	line:41
+Variable	../python/models/utils.py	/^from tensorflow import Variable, gfile, truncated_normal, constant$/;"	kind:namespace	line:1
+WGAN	../python/models/gan.py	/^class WGAN(object):$/;"	kind:class	line:48
 WGAN	../python/train.py	/^from models.gan import Model, WGAN$/;"	kind:namespace	line:2
-__init__	../python/data.py	/^    def __init__(self, data, batch_size, shuf=True):$/;"	kind:member	line:8
-__init__	../python/models/gan.py	/^    def __init__(self, G, D, data_shape, clip_weight=1.0):$/;"	kind:member	line:42
-__init__	../python/models/gan.py	/^    def __init__(self, nn_factory, input_shape, name):$/;"	kind:member	line:9
+__init__	../python/data.py	/^    def __init__(self, data, batch_size, shuf=True, logger=None):$/;"	kind:member	line:8
+__init__	../python/models/gan.py	/^    def __init__(self, G, D, learning_rate=5e-5, clip_weight=1.0, logger=None, saver=None, summary_dir='checkpoints\/summaries', name='wgan'):$/;"	kind:member	line:49
+__init__	../python/models/gan.py	/^    def __init__(self, nn_factory, input_shape, name):$/;"	kind:member	line:13
 __init__	../python/models/gan3d.py	/^    def __init__(self, logging, batch_size, learning_rate, image_size, hidden_size):$/;"	kind:member	line:9
 __init__	../python/models/gan3d.py	/^    def __init__(self, logging, batch_size, learning_rate, image_size, hidden_size, latent_size):$/;"	kind:member	line:81
 __init__	../python/models/sketch-to-vertices.py	/^    def __init__(self, logging, batch_size, learning_rate, image_size, sess=None):$/;"	kind:member	line:12
 __init__.py	../python/__init__.py	1;"	kind:file	line:1
 __init__.py	../python/models/__init__.py	1;"	kind:file	line:1
-_inference_graph	../python/models/gan.py	/^    def _inference_graph(self, input, name):$/;"	kind:member	line:33
+_inference_graph	../python/models/gan.py	/^    def _inference_graph(self, input, name, front=None):$/;"	kind:member	line:37
 _inference_graph	../python/models/gan3d.py	/^    def _inference_graph(self):$/;"	kind:member	line:107
 _inference_graph	../python/models/gan3d.py	/^    def _inference_graph(self):$/;"	kind:member	line:37
 _inference_graph	../python/models/sketch-to-vertices.py	/^    def _inference_graph(self, training):$/;"	kind:member	line:39
-_init_logits	../python/models/gan.py	/^    def _init_logits(self):$/;"	kind:member	line:58
-_init_weights	../python/models/gan.py	/^    def _init_weights(self):$/;"	kind:member	line:64
-_loss	../python/models/gan.py	/^    def _loss(self):$/;"	kind:member	line:69
+_init_logits	../python/models/gan.py	/^    def _init_logits(self):$/;"	kind:member	line:90
+_init_summaries	../python/models/gan.py	/^    def _init_summaries(self):$/;"	kind:member	line:105
+_init_weights	../python/models/gan.py	/^    def _init_weights(self):$/;"	kind:member	line:96
+_loss	../python/models/gan.py	/^    def _loss(self):$/;"	kind:member	line:116
 _loss	../python/models/gan3d.py	/^    def _loss(self):$/;"	kind:member	line:120
 _loss	../python/models/gan3d.py	/^    def _loss(self):$/;"	kind:member	line:50
 _loss	../python/models/sketch-to-vertices.py	/^    def _loss(self):$/;"	kind:member	line:62
 _optimizer	../python/models/gan3d.py	/^    def _optimizer(self):$/;"	kind:member	line:125
 _optimizer	../python/models/gan3d.py	/^    def _optimizer(self):$/;"	kind:member	line:55
 _optimizer	../python/models/sketch-to-vertices.py	/^    def _optimizer(self):$/;"	kind:member	line:67
-_train_operations	../python/models/gan.py	/^    def _train_operations(self):$/;"	kind:member	line:78
-add_placeholder	../python/models/gan.py	/^    def add_placeholder(self, name, logits):$/;"	kind:member	line:20
-batch_size	../python/train.py	/^batch_size = FLAGS.batch_size$/;"	kind:variable	line:19
-batch_x	../python/train.py	/^            batch_x = data.next_batch()$/;"	kind:variable	line:27
+_train_operations	../python/models/gan.py	/^    def _train_operations(self):$/;"	kind:member	line:124
+add_placeholder	../python/models/gan.py	/^    def add_placeholder(self, name, logits, front=None):$/;"	kind:member	line:24
+batch_size	../python/train.py	/^batch_size = FLAGS.batch_size$/;"	kind:variable	line:34
+batch_x	../python/train.py	/^            batch_x = data.train.next_batch(FLAGS.batch_size)$/;"	kind:variable	line:49
+constant	../python/models/utils.py	/^from tensorflow import Variable, gfile, truncated_normal, constant$/;"	kind:namespace	line:1
 conv_3d	../python/models/gan3d.py	/^from tflearn.layers.conv import conv_3d, conv_3d_transpose$/;"	kind:namespace	line:2
 conv_3d_transpose	../python/models/gan3d.py	/^from tflearn.layers.conv import conv_3d, conv_3d_transpose$/;"	kind:namespace	line:2
 convert	../utils/TreeUtils/objToJson	/^def convert(directory, executable):$/;"	kind:function	line:7
+convert	../utils/objToJson	/^def convert(directory, executable, path):$/;"	kind:function	line:7
 csv	../utils/parser/parser.py	/^import csv, sys, glob, os, re$/;"	kind:namespace	line:3
 data	../python/main.py	/^data = dummy.generate_data(5, (64, 64, 64, 1))$/;"	kind:variable	line:4
-data	../python/train.py	/^data = Data([1, 2, 3], FLAGS.batch_size)$/;"	kind:variable	line:22
+data	../python/train.py	/^data = input_data.read_data_sets('MNIST_data\/')$/;"	kind:variable	line:39
 data.py	../python/data.py	1;"	kind:file	line:1
+datetime	../python/models/gan.py	/^from datetime import datetime$/;"	kind:namespace	line:5
 defaultdict	../python/preprocess.py	/^from collections import defaultdict$/;"	kind:namespace	line:3
 directory	../utils/TreeUtils/objToJson	/^        directory = os.path.abspath(os.path.expanduser(sys.argv[1]))$/;"	kind:variable	line:24
-disc_point_cloud	../python/models/factories.py	/^def disc_point_cloud(input):$/;"	kind:function	line:27
-disc_point_cloud	../python/train.py	/^from models.factories import gen_point_cloud, disc_point_cloud$/;"	kind:namespace	line:3
+directory	../utils/objToJson	/^        directory = os.path.abspath(os.path.expanduser(sys.argv[1]))$/;"	kind:variable	line:35
+disc_point_cloud	../python/models/factories.py	/^def disc_point_cloud(input):$/;"	kind:function	line:30
+disc_point_cloud	../python/train.py	/^from models.factories import gen_point_cloud, disc_point_cloud, mnist_disc, mnist_gen$/;"	kind:namespace	line:3
 division	../python/models/sketch-to-vertices.py	/^from __future__ import division$/;"	kind:namespace	line:1
 dummy	../python/main.py	/^import dummy$/;"	kind:namespace	line:2
 dummy.py	../python/dummy.py	1;"	kind:file	line:1
 executable	../utils/TreeUtils/objToJson	/^        executable = os.path.abspath(os.path.expanduser(sys.argv[2]))$/;"	kind:variable	line:25
+executable	../utils/objToJson	/^        executable = os.path.abspath(os.path.expanduser(sys.argv[2]))$/;"	kind:variable	line:36
 factories.py	../python/models/factories.py	1;"	kind:file	line:1
-flags	../python/train.py	/^flags = tf.app.flags$/;"	kind:variable	line:6
-gan	../python/train.py	/^gan = WGAN(G, D, [-1, 3, 256], clip_weight=1e-2)$/;"	kind:variable	line:17
+flags	../python/train.py	/^flags = tf.app.flags$/;"	kind:variable	line:18
+gan	../python/train.py	/^gan = WGAN(G, D, clip_weight=FLAGS.clip_weight)$/;"	kind:variable	line:42
 gan.py	../python/models/gan.py	1;"	kind:file	line:1
 gan3d.py	../python/models/gan3d.py	1;"	kind:file	line:1
-gen_point_cloud	../python/models/factories.py	/^def gen_point_cloud(input):$/;"	kind:function	line:10
-gen_point_cloud	../python/train.py	/^from models.factories import gen_point_cloud, disc_point_cloud$/;"	kind:namespace	line:3
-generate	../python/models/gan.py	/^    def generate(self, z=None, n=1):$/;"	kind:member	line:105
+gen_point_cloud	../python/models/factories.py	/^def gen_point_cloud(input):$/;"	kind:function	line:13
+gen_point_cloud	../python/train.py	/^from models.factories import gen_point_cloud, disc_point_cloud, mnist_disc, mnist_gen$/;"	kind:namespace	line:3
+generate	../python/models/gan.py	/^    def generate(self, z=None, n=1):$/;"	kind:member	line:167
 generate	../python/models/gan3d.py	/^    def generate(self, X):$/;"	kind:member	line:141
 generate_data	../python/dummy.py	/^def generate_data(n, size):$/;"	kind:function	line:3
-get_placeholders	../python/models/gan.py	/^    def get_placeholders(self):$/;"	kind:member	line:28
+get_placeholders	../python/models/gan.py	/^    def get_placeholders(self):$/;"	kind:member	line:32
+gfile	../python/models/utils.py	/^from tensorflow import Variable, gfile, truncated_normal, constant$/;"	kind:namespace	line:1
 glob	../utils/parser/parser.py	/^import csv, sys, glob, os, re$/;"	kind:namespace	line:3
-init_bias	../python/models/utils.py	/^def init_bias(shape, value=0.1, name=None):$/;"	kind:function	line:6
-init_weight	../python/models/utils.py	/^def init_weight(shape, name=None):$/;"	kind:function	line:3
+img	../python/train.py	/^            img = Image.fromarray(np.reshape(k[0]*255, [28, 28]))$/;"	kind:variable	line:60
+img	../python/train.py	/^            img = img.convert('RGB')$/;"	kind:variable	line:61
+init_bias	../python/models/utils.py	/^def init_bias(shape, value=0.1, name=None):$/;"	kind:function	line:10
+init_weight	../python/models/utils.py	/^def init_weight(shape, name=None):$/;"	kind:function	line:7
+input_data	../python/train.py	/^from tensorflow.examples.tutorials.mnist import input_data$/;"	kind:namespace	line:38
 j	../python/preprocess.py	/^j = defaultdict(list)$/;"	kind:variable	line:9
+join	../python/models/gan.py	/^from os.path import join$/;"	kind:namespace	line:6
 json	../python/preprocess.py	/^import json$/;"	kind:namespace	line:4
 json	../utils/TreeUtils/objToJson	/^import json$/;"	kind:namespace	line:5
+json	../utils/objToJson	/^import json$/;"	kind:namespace	line:5
 k	../python/main.py	/^k = Discriminator3d(True, 5, 0.001, 64, 15)$/;"	kind:variable	line:5
 k	../python/preprocess.py	/^k = json.loads(test_json)$/;"	kind:variable	line:8
+k	../python/train.py	/^            k = gan.generate(n=1)$/;"	kind:variable	line:58
 l	../python/preprocess.py	/^    l = tuple(map(float, l.split(',')))$/;"	kind:variable	line:12
 leaky_relu	../python/models/factories.py	/^from tflearn.activations import leaky_relu$/;"	kind:namespace	line:5
 leaky_relu	../python/models/gan3d.py	/^from tflearn.activations import leaky_relu$/;"	kind:namespace	line:1
-loss_d	../python/train.py	/^            loss_d = gan.partial_fit_discriminator(batch_x)$/;"	kind:variable	line:28
-loss_g	../python/train.py	/^        loss_g = gan.partial_fit_generator(batch_size)$/;"	kind:variable	line:30
+logger	../python/train.py	/^logger = logging.getLogger(__name__)$/;"	kind:variable	line:11
+logging	../python/models/gan.py	/^import logging$/;"	kind:namespace	line:9
+logging	../python/train.py	/^import logging$/;"	kind:namespace	line:6
+loss_d	../python/train.py	/^        loss_d = 0$/;"	kind:variable	line:47
+loss_g	../python/train.py	/^        loss_g = gan.partial_fit_generator(batch_size, summarize=summarize)$/;"	kind:variable	line:53
 main.py	../python/main.py	1;"	kind:file	line:1
-next_batch	../python/data.py	/^    def next_batch(self):$/;"	kind:member	line:21
+maybe_make_dir	../python/models/gan.py	/^from utils import maybe_make_dir$/;"	kind:namespace	line:7
+maybe_make_dir	../python/models/utils.py	/^def maybe_make_dir(directory):$/;"	kind:function	line:3
+mnist_disc	../python/models/factories.py	/^def mnist_disc(x):$/;"	kind:function	line:86
+mnist_disc	../python/train.py	/^from models.factories import gen_point_cloud, disc_point_cloud, mnist_disc, mnist_gen$/;"	kind:namespace	line:3
+mnist_gen	../python/models/factories.py	/^def mnist_gen(z):$/;"	kind:function	line:50
+mnist_gen	../python/train.py	/^from models.factories import gen_point_cloud, disc_point_cloud, mnist_disc, mnist_gen$/;"	kind:namespace	line:3
+next_batch	../python/data.py	/^    def next_batch(self):$/;"	kind:member	line:22
 np	../python/dummy.py	/^import numpy as np$/;"	kind:namespace	line:1
-np	../python/models/gan.py	/^import numpy as np$/;"	kind:namespace	line:6
+np	../python/models/gan.py	/^import numpy as np$/;"	kind:namespace	line:10
 np	../python/models/sketch-to-vertices.py	/^import numpy as np$/;"	kind:namespace	line:5
-num_batches	../python/data.py	/^    def num_batches(self):$/;"	kind:member	line:18
+np	../python/train.py	/^import numpy as np$/;"	kind:namespace	line:9
+num_batches	../python/data.py	/^    def num_batches(self):$/;"	kind:member	line:19
 objToJson	../utils/TreeUtils/objToJson	1;"	kind:file	line:1
+objToJson	../utils/objToJson	1;"	kind:file	line:1
 os	../utils/TreeUtils/objToJson	/^import os$/;"	kind:namespace	line:4
+os	../utils/objToJson	/^import os$/;"	kind:namespace	line:4
 os	../utils/parser/parser.py	/^import csv, sys, glob, os, re$/;"	kind:namespace	line:3
+out_hdlr	../python/train.py	/^out_hdlr = logging.StreamHandler(sys.stdout)$/;"	kind:variable	line:12
 parameters	../utils/parser/parser.py	/^parameters = [$/;"	kind:variable	line:13
 parse	../utils/parser/parser.py	/^def parse(inDir, outDir, parameters):$/;"	kind:function	line:25
 parser.py	../utils/parser/parser.py	1;"	kind:file	line:1
-partial_fit_discriminator	../python/models/gan.py	/^    def partial_fit_discriminator(self, X):$/;"	kind:member	line:86
-partial_fit_generator	../python/models/gan.py	/^    def partial_fit_generator(self, n_batch):$/;"	kind:member	line:96
+partial_fit_discriminator	../python/models/gan.py	/^    def partial_fit_discriminator(self, X, summarize=False):$/;"	kind:member	line:131
+partial_fit_generator	../python/models/gan.py	/^    def partial_fit_generator(self, n_batch, summarize=False):$/;"	kind:member	line:150
 partial_fit_step	../python/models/gan3d.py	/^    def partial_fit_step(self, X, Y):$/;"	kind:member	line:128
 partial_fit_step	../python/models/gan3d.py	/^    def partial_fit_step(self, X, Y):$/;"	kind:member	line:58
 partial_fit_step	../python/models/sketch-to-vertices.py	/^    def partial_fit_step(self, X, Y):$/;"	kind:member	line:70
+path	../utils/objToJson	/^            path = 1$/;"	kind:variable	line:39
+path	../utils/objToJson	/^        path = 0$/;"	kind:variable	line:37
 predict	../python/models/gan3d.py	/^    def predict(self, X):$/;"	kind:member	line:71
 predict	../python/models/sketch-to-vertices.py	/^    def predict(self, X):$/;"	kind:member	line:83
 preprocess.py	../python/preprocess.py	1;"	kind:file	line:1
 re	../utils/parser/parser.py	/^import csv, sys, glob, os, re$/;"	kind:namespace	line:3
+save_model	../python/models/gan.py	/^    def save_model(self, directory='checkpoints\/models'):$/;"	kind:member	line:173
 shuffle	../python/data.py	/^from random import shuffle$/;"	kind:namespace	line:5
 sketch-to-vertices.py	../python/models/sketch-to-vertices.py	1;"	kind:file	line:1
+summarize	../python/train.py	/^                summarize=summarize and (critic_step == FLAGS.n_critic - 1))$/;"	kind:variable	line:51
+sys	../python/train.py	/^import sys$/;"	kind:namespace	line:7
 sys	../utils/TreeUtils/objToJson	/^import sys$/;"	kind:namespace	line:3
+sys	../utils/objToJson	/^import sys$/;"	kind:namespace	line:3
 sys	../utils/parser/parser.py	/^import csv, sys, glob, os, re$/;"	kind:namespace	line:3
+tc	../python/models/factories.py	/^tc = tf.contrib$/;"	kind:variable	line:10
+tcl	../python/models/factories.py	/^tcl = tf.contrib.layers$/;"	kind:variable	line:11
 test_json	../python/preprocess.py	/^test_json = open('data\/json\/graph.12001.obj.json').read() # '{"1,2,3":["1,2,3"], "4,6,5":["1,2,3","8,9,10"]}'$/;"	kind:variable	line:6
 tf	../python/models/factories.py	/^import tensorflow as tf$/;"	kind:namespace	line:8
-tf	../python/models/gan.py	/^import tensorflow as tf$/;"	kind:namespace	line:5
+tf	../python/models/gan.py	/^import tensorflow as tf$/;"	kind:namespace	line:8
 tf	../python/models/gan3d.py	/^import tensorflow as tf$/;"	kind:namespace	line:4
 tf	../python/models/sketch-to-vertices.py	/^import tensorflow as tf$/;"	kind:namespace	line:4
-tf	../python/models/utils.py	/^import tensorflow as tf$/;"	kind:namespace	line:1
-tf	../python/train.py	/^import tensorflow as tf$/;"	kind:namespace	line:4
+tf	../python/train.py	/^import tensorflow as tf$/;"	kind:namespace	line:8
 tl	../python/models/gan3d.py	/^import tflearn as tl$/;"	kind:namespace	line:5
+tqdm	../python/train.py	/^from tqdm import tqdm$/;"	kind:namespace	line:5
 train.py	../python/train.py	1;"	kind:file	line:1
+truncated_normal	../python/models/utils.py	/^from tensorflow import Variable, gfile, truncated_normal, constant$/;"	kind:namespace	line:1
 utils	../python/models/sketch-to-vertices.py	/^import utils$/;"	kind:namespace	line:6
 utils.py	../python/models/utils.py	1;"	kind:file	line:1
+write_summary	../python/models/gan.py	/^    def write_summary(self, summary, directory, train=True):$/;"	kind:member	line:180

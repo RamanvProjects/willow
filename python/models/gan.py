@@ -4,7 +4,7 @@ Author(s): Vivek Ramanujan, (Pato)
 """
 from datetime import datetime
 from os.path import join
-from utils import maybe_make_dir
+from python.models.utils import maybe_make_dir
 import tensorflow as tf
 import logging
 import numpy as np
@@ -46,7 +46,7 @@ class Model(object):
 
 
 class WGAN(object):
-    def __init__(self, G, D, learning_rate=5e-5, clip_weight=1.0, logger=None, saver=None, summary_dir='checkpoints/summaries', name='wgan'):
+    def __init__(self, G, D, learning_rate=5e-5, clip_weight=1.0, logger=None, saver=None, summary_dir='checkpoints/summaries', name='wgan', sess=None):
         if logger is None:
             self.logger = logging.getLogger(__name__)
         else:
@@ -84,7 +84,7 @@ class WGAN(object):
         self.test_writer = tf.summary.FileWriter(test_dir)
 
         init = tf.initialize_all_variables()
-        self.sess = tf.Session()
+        self.sess = tf.Session() if sess is None else sess
         self.sess.run(init)
 
     def _init_logits(self):
@@ -118,14 +118,14 @@ class WGAN(object):
         self.real_input, real_D = self.discriminator.placeholders["real"]
 
         print "DISC PLACEHOLDERS", self.discriminator.placeholders
-        self.gen_loss = tf.reduce_mean(fake_D)
-        self.disc_loss = tf.reduce_mean(real_D - fake_D)
+        self.gen_loss = -tf.reduce_mean(fake_D)
+        self.disc_loss = tf.reduce_mean(-real_D + fake_D)
 
     def _train_operations(self):
         self.clip = [weight.assign(tf.clip_by_value(weight, -self.clip_weight, self.clip_weight)) for weight in self.discriminator_weights]
 
         self.optimizer = tf.train.RMSPropOptimizer(self.lr)
-        self.disc_train_op = self.optimizer.minimize(self.disc_loss, var_list=self.discriminator_weights)
+        self.disc_train_op = tf.train.RMSPropOptimizer(self.lr/5).minimize(self.disc_loss, var_list=self.discriminator_weights)
         self.gen_train_op = self.optimizer.minimize(self.gen_loss, var_list=self.generator_weights)
 
     def partial_fit_discriminator(self, X, summarize=False):
