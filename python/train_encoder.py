@@ -1,6 +1,8 @@
 from data import Data
 from models.gan import Model, WGAN
+from models.sketch_encoder import SketchEncoder
 from models.factories import gen_point_cloud, disc_point_cloud
+from models.utils import import_sess
 from preprocess import parse_dir
 from tqdm import tqdm
 
@@ -26,28 +28,32 @@ flags.DEFINE_integer('summary_step', 20, 'Summarize every (blank) batches')
 flags.DEFINE_integer('print_every', 10, 'Print every (blank) batches')
 flags.DEFINE_string('data_dir', '../data/json', 'Directory containing data files, one tree per file')
 flags.DEFINE_string('gan_file', None, 'Trained GAN checkpoint directory (absolutely required)')
+flags.DEFINE_integer('hog_size', 64, 'HOG feature size')
+flags.DEFINE_string('model_dir', 'checkpoints/models', 'Model save directory')
 
 if FLAGS.gan_file == None or not tf.gfile.Exists(FLAGS.gan_file):
     logger.warn("GAN directory must be provided and valid, exiting...")
 
-batch_size = FLAGS.batch_size
+sess = import_sess(FLAGS.gan_file)
 
 # Waiting for data
-points_per_tree = parse_dir(FLAGS.data_dir)
+points_per_tree = parse_sketches(FLAGS.data_dir)
 data = Data(points_per_tree, FLAGS.batch_size, logger=logger)
-G = Model(gen_point_cloud, [None, 100], name='generator')
-D = Model(disc_point_cloud, [None, 784], name='discriminator')
-gan = WGAN(G, D, clip_weight=FLAGS.clip_weight, sess)
+G = Model(gen_point_cloud, [None, FLAGS.latent_size], name='generator')
+D = Model(disc_point_cloud, [None, 256, 3], name='discriminator')
+gan = WGAN(G, D, clip_weight=FLAGS.clip_weight, sess=sess)
+
+encoder = SketchEncoder(gan, logging=logger, learning_rate=FLAGS.learning_rate, input_shape=[None, 3, FLAGS.hog_size], batch_size=FLAGS.batch_size, sess=sess, model_path=os.path.abspath(FLAGS.model_dir))
+
 
 for epoch in tqdm(range(FLAGS.num_epochs), desc="Epoch"):
-    for batch in tqdm(range(data.train.num_examples/FLAGS.batch_size), desc="Batch"):
+    for batch in tqdm(range(data.num_batches()):
+        x, y = data.next_batch()
+        batch_loss = encoder.partial_fit_step(x, y)
 
         if batch % FLAGS.print_every == 0:
             logger.info("Epoch %d, Batch %d" % (epoch, batch))
-            logger.info("Discriminator loss: %f" % (loss_d/float(FLAGS.n_critic)))
-            logger.info("Generator loss: %f" % loss_g)
-            k = gan.generate(n=1)
-            print k
-            img = Image.fromarray(np.reshape(k[0]*255, [28, 28]))
-            img = img.convert('RGB')
-            img.save('%s.png' % batch)
+            logger.info("L2 loss: %f" % (batch_loss/float(FLAGS.batch_size)))
+        
+        if batch % FLAGS.save_every == 0:
+            encoder.save_model()

@@ -2,15 +2,18 @@ from __future__ import division
 from tflearn.layers.core import *
 import tensorflow as tf
 import numpy as np
+import os
 import utils
 
 
 class SketchEncoder(object):
-    def __init__(self, gan, logging, batch_size, learning_rate, input_shape, sess=None):
+    def __init__(self, gan, logging, batch_size, learning_rate, input_shape, sess=None, model_path="checkpoints/models", name="sketch_encoder"):
         """
         Evaluation network for chess boards. Based on an MNIST CNN but for 8x8 images
         """
         # Network Parameters
+        self.name = name
+        self.model_path = model_path
         self.logging = logging
         self.batch_size = batch_size
         self.learning_rate = learning_rate
@@ -32,6 +35,7 @@ class SketchEncoder(object):
 
         # Setting up instance
         init = tf.initialize_all_variables()
+        self.saver = tf.train.Saver()
         self.sess = tf.Session() if sess is None else sess
         self.sess.run(init)
 
@@ -90,3 +94,13 @@ class SketchEncoder(object):
         """
 
         return = self.sess.run(self.logits, feed_dict={self.x: X, self.keep_prob: 1.0})
+
+    def save_model(self, directory=None):
+        if directory is None:
+            directory = self.model_path
+
+        filename = "%s_%s" % (self.name, self.now().strftime("%Y-%m-%d-%H%M"))
+        if not tf.gfile.Exists(directory):
+            tf.gfile.MakeDirs(directory)
+        
+        self.saver.save(self.sess, join(directory, filename))

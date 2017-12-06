@@ -8,6 +8,7 @@ import logging
 import sys
 import tensorflow as tf
 import numpy as np
+import os
 
 logger = logging.getLogger(__name__)
 out_hdlr = logging.StreamHandler(sys.stdout)
@@ -28,6 +29,7 @@ flags.DEFINE_integer('save_step', 50, 'Save every (blank) batches')
 flags.DEFINE_integer('summary_step', 20, 'Summarize every (blank) batches')
 flags.DEFINE_integer('print_every', 10, 'Print every (blank) batches')
 flags.DEFINE_string('data_dir', 'data/json', 'Directory containing data files, one tree per file')
+flags.DEFINE_string('checkpoint_dir', 'checkpoints/', 'Directory to store checkpoints')
 
 batch_size = FLAGS.batch_size
 
@@ -54,7 +56,6 @@ for epoch in tqdm(range(FLAGS.num_epochs), desc="Epoch"):
             logger.info("Generator loss: %f" % loss_g)
             k = gan.generate(n=1)
             print "Gen shape: ", k.shape
-            # print k
-            # img = Image.fromarray(np.reshape(k[0]*255, [28, 28]))
-            # img = img.convert('RGB')
-            # img.save('%s.png' % batch)
+        
+        if batch % FLAGS.save_step == 0:
+            gan.save_model(directory=os.path.abspath(os.path.join(FLAGS.checkpoint_dir, 'models')))
