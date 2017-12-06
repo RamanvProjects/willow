@@ -4,7 +4,7 @@ Author(s): Vivek Ramanujan, (Pato)
 """
 from datetime import datetime
 from os.path import join
-from utils import maybe_make_dir
+from python.models.utils import maybe_make_dir
 import tensorflow as tf
 import logging
 import numpy as np
@@ -46,7 +46,7 @@ class Model(object):
 
 
 class WGAN(object):
-    def __init__(self, G, D, learning_rate=5e-5, clip_weight=1.0, logger=None, saver=None, summary_dir='checkpoints/summaries', name='wgan'):
+    def __init__(self, G, D, learning_rate=5e-5, clip_weight=1.0, logger=None, saver=None, summary_dir='checkpoints/summaries', name='wgan', sess=None):
         if logger is None:
             self.logger = logging.getLogger(__name__)
         else:
@@ -84,7 +84,7 @@ class WGAN(object):
         self.test_writer = tf.summary.FileWriter(test_dir)
 
         init = tf.initialize_all_variables()
-        self.sess = tf.Session()
+        self.sess = tf.Session() if sess is None else sess
         self.sess.run(init)
 
     def _init_logits(self):

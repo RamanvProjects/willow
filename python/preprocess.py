@@ -22,9 +22,9 @@ def parse_dir(dir_name):
 	return parsed_trees
 
 def parse_file(file_name):
-	json_file = open(file_name).read()
-	k = json.loads(json_file)
-	j = defaultdict(list)
+    json_file = open(file_name).read()
+    k = json.loads(json_file)
+    j = defaultdict(list)
 
 	for l, v in k.iteritems():
 	    l = tuple(map(float, l.split(', ')))
@@ -46,7 +46,7 @@ def parse_file(file_name):
 		# padding = zeros((3, pad_size))
 		# sorted_verts = concatenate((padding, verts), axis=1)
 
-	return sorted_verts
+    return sorted_verts
 
 
 
