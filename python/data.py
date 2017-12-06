@@ -10,9 +10,9 @@ class Data(object):
         self.data = data
         self.shuffle = shuf
         if self.shuffle:
-            self.data = shuffle(self.data)
+            shuffle(self.data)
 
-        self.size = len(self.data)
+        self.size = len(data)
         self.batch_size = batch_size
         self.curr_idx = 0
 
@@ -24,7 +24,7 @@ class Data(object):
             self.logger.info("Data reset to index 0")
             self.curr_idx = 0
             if self.shuffle:
-                self.data = shuffle(self.data)
+                shuffle(self.data)
         
         batch = self.data[self.curr_idx:self.curr_idx + self.batch_size]
         self.curr_idx += self.batch_size

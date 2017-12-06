@@ -27,28 +27,24 @@ flags.DEFINE_integer('latent_size', 100, 'Size of the latent vector')
 flags.DEFINE_integer('save_step', 50, 'Save every (blank) batches')
 flags.DEFINE_integer('summary_step', 20, 'Summarize every (blank) batches')
 flags.DEFINE_integer('print_every', 10, 'Print every (blank) batches')
-flags.DEFINE_string('data_dir', '../data/json', 'Directory containing data files, one tree per file')
-
-# G = Model(gen_point_cloud, [-1, 100], name='generator')
-# D = Model(disc_point_cloud, [-1, 3, 256], name='discriminator')
-# gan = WGAN(G, D, [-1, 3, 256], clip_weight=1e-2)
+flags.DEFINE_string('data_dir', 'data/json', 'Directory containing data files, one tree per file')
 
 batch_size = FLAGS.batch_size
 
 # Waiting for data
 points_per_tree = parse_dir(FLAGS.data_dir)
-data = Data(points_per_tree, FLAGS.batch_size, logger=logger)
-G = Model(gen_point_cloud, [None, 100], name='generator')
-D = Model(disc_point_cloud, [None, 784], name='discriminator')
+data = Data(points_per_tree, FLAGS.batch_size, shuf=False, logger=logger)
+G = Model(gen_point_cloud, [None, FLAGS.latent_size], name='generator')
+D = Model(disc_point_cloud, [None, 256, 3], name='discriminator')
 gan = WGAN(G, D, clip_weight=FLAGS.clip_weight)
 
 for epoch in tqdm(range(FLAGS.num_epochs), desc="Epoch"):
-    for batch in tqdm(range(data.train.num_examples/FLAGS.batch_size), desc="Batch"):
+    for batch in tqdm(range(data.num_batches()), desc="Batch"):
         summarize = batch % FLAGS.summary_step == 0
         loss_d = 0
         for critic_step in range(FLAGS.n_critic):
-            batch_x = data.train.next_batch(FLAGS.batch_size)
-            loss_d += gan.partial_fit_discriminator(batch_x[0],
+            batch_x = data.next_batch()
+            loss_d += gan.partial_fit_discriminator(batch_x,
                 summarize=summarize and (critic_step == FLAGS.n_critic - 1))
 
         loss_g = gan.partial_fit_generator(batch_size, summarize=summarize)
@@ -57,7 +53,8 @@ for epoch in tqdm(range(FLAGS.num_epochs), desc="Epoch"):
             logger.info("Discriminator loss: %f" % (loss_d/float(FLAGS.n_critic)))
             logger.info("Generator loss: %f" % loss_g)
             k = gan.generate(n=1)
-            print k
-            img = Image.fromarray(np.reshape(k[0]*255, [28, 28]))
-            img = img.convert('RGB')
-            img.save('%s.png' % batch)
+            print "Gen shape: ", k.shape
+            # print k
+            # img = Image.fromarray(np.reshape(k[0]*255, [28, 28]))
+            # img = img.convert('RGB')
+            # img.save('%s.png' % batch)
