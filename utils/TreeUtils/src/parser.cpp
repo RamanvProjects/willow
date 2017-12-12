@@ -13,7 +13,8 @@ void Parser::writeJson(const std::__cxx11::string &path, std::vector<glm::vec3> 
     file.open(path);
 //        file.write("{\n");
     file << "{" << std::endl;
-    for(size_t i = 0; i < directedEdges.size(); i++)
+    size_t i;
+    for(i = 0; i < directedEdges.size() - 1; ++i)
     {
         std::vector<size_t> edges = directedEdges.at(i);
         std::string key = glm::to_string(vertices[i]).substr(5);
@@ -31,6 +32,23 @@ void Parser::writeJson(const std::__cxx11::string &path, std::vector<glm::vec3> 
         }
         file << "]," << std::endl;
     }
+
+    std::vector<size_t> edges = directedEdges.at(i);
+    std::string key = glm::to_string(vertices[i]).substr(5);
+    key = key.substr(1, key.length()-2);
+    file << "\t\"" << key << "\" : [";
+    for(std::vector<size_t>::iterator it = edges.begin(); it != edges.end(); ++it)
+    {
+        std::string value = glm::to_string(vertices[*it]).substr(5);
+        value = value.substr(1, value.length()-2);
+        file << "\"" << value << "\"";
+        if(*it != edges.back())
+        {
+            file << ",";
+        }
+    }
+    file << "]" << std::endl;
+
     file << "}\n";
     file.close();
 }

@@ -23,9 +23,9 @@ def convert(directory, executable, path):
                 output_path = directory + "/json/" + f + ".json";
             output_clo = " --output_path " + output_path
             if (path):
-                os.system(executable + input_clo + output_clo + " --path")
+                os.system(executable + input_clo + output_clo + " --path --recalculate_branches false --output_as_json true")
             else:
-                os.system(executable + input_clo + output_clo)
+                os.system(executable + input_clo + output_clo + " --recalculate_branches false --output_as_json true")
 
 if __name__ == '__main__':
     if (len(sys.argv) < 3):

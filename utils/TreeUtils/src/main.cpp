@@ -29,12 +29,16 @@ int main(int argc, char *argv[])
 
     std::vector<glm::vec3> vertices;
     std::vector<std::vector<size_t>> edges;
-    Parser::readObj(input,vertices);
     if(recalculate)
     {
-      PointCloud cloud(vertices);
-      cloud.generateEdges(edges);
-      vertices = cloud.m_points;
+        Parser::readObj(input,vertices);
+        PointCloud cloud(vertices);
+        cloud.generateEdges(edges);
+        vertices = cloud.m_points;
+    }
+    else
+    {
+        Parser::readObj(input,vertices,edges);
     }
 
     if(as_json)
